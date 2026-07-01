@@ -2,6 +2,8 @@
 #include "esp_log.h"
 #include "driver/spi_master.h"
 
+#include "_74HC595.h"
+
 #define PIN_MOSI 23
 #define PIN_MISO -1
 #define PIN_CLK 18
@@ -24,4 +26,10 @@ void app_main(void) {
     };
 
     ESP_ERROR_CHECK(spi_bus_initialize(host_device, &bus_config, SPI_DMA_CH_AUTO));
+
+    ESP_ERROR_CHECK(_74HC595_init(host_device));
+
+    while(1) {
+        
+    }
 }
