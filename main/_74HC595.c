@@ -13,7 +13,6 @@ esp_err_t _74HC595_init(spi_host_device_t host_device) {
         .mode = 0, // (CPOL, CPHA) = (0, 0); Device idles at logical low and sampled at logical high
         .queue_size = 1,
         .spics_io_num = PIN_SPICS, // GPIO pin connected to ST_CP
-        .flags = SPI_DEVICE_POSITIVE_CS,
     };
 
     ESP_ERROR_CHECK(spi_bus_add_device(host_device, &dev_config, &_74HC595_handle));
@@ -27,9 +26,10 @@ esp_err_t _74HC595_write_byte(uint8_t data) {
     // Use memset to clear previous memory in the register
     memset(&transaction, 0, sizeof(transaction));
 
-    transaction.length = 8; // Transmitting 8 bits (1 byte)
-    transaction.tx_buffer = &data; // Address of the byte being sent in from main.c
-    transaction.rx_buffer = NULL; // No MISO
+    transaction.length = 8; // Transmitting 8 bits
+    transaction.flags = SPI_TRANS_USE_TXDATA; // Accessing the data directly in the structure; avoids using the heap
+    transaction.tx_data[0] = data;
+    transaction.rx_buffer = NULL;
 
     ESP_ERROR_CHECK(spi_device_transmit(_74HC595_handle, &transaction));
 
