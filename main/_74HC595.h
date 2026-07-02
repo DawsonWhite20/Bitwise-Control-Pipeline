@@ -11,4 +11,6 @@
 
 esp_err_t _74HC595_init(spi_host_device_t host_device);
 
+esp_err_t _74HC595_write_byte(uint8_t data);
+
 #endif

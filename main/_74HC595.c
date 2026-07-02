@@ -13,6 +13,7 @@ esp_err_t _74HC595_init(spi_host_device_t host_device) {
         .mode = 0, // (CPOL, CPHA) = (0, 0); Device idles at logical low and sampled at logical high
         .queue_size = 1,
         .spics_io_num = PIN_SPICS, // GPIO pin connected to ST_CP
+        .flags = SPI_DEVICE_POSITIVE_CS,
     };
 
     ESP_ERROR_CHECK(spi_bus_add_device(host_device, &dev_config, &_74HC595_handle));
